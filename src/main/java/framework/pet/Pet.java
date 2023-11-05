@@ -28,6 +28,8 @@ public class Pet {
             switch(user){
                 case 1 -> showPet();
                 case 2 -> addPet();
+                case 3 -> updatePet();
+                case 4 -> removePet();
                 case 5 -> searchPetName();
                 case 6 -> searchPetAge();
                 default -> System.out.println("Not In Option");
@@ -53,6 +55,30 @@ public class Pet {
             pet = new petObj(nameAge[0], Integer.parseInt(nameAge[1]));
             collection.add(pet);
         }
+    }
+    
+    public static void updatePet(){
+        Scanner input = new Scanner(System.in);
+        Scanner nameInput = new Scanner(System.in);
+        showPet();
+        System.out.print("Enter The 'ID' Of The Pet You Want To Rename: ");
+        int id = input.nextInt();
+        System.out.print("Enter The New Name And Age: \n(Name) (Age): ");
+        String pet = nameInput.nextLine();
+        String[] nameAge = pet.split(" ");
+        System.out.println("Changing "+ collection.get(id).getName() + " " + collection.get(id).getAge() + " To " + nameAge[0] + " " + nameAge[1]);
+        collection.get(id).setName(nameAge[0]);
+        collection.get(id).setAge(Integer.parseInt(nameAge[1]));
+    }
+    
+    public static void removePet(){
+        Scanner input = new Scanner(System.in);
+        showPet();
+        System.out.print("Enter ID Of Pet To Remove: ");
+        int id = input.nextInt();
+        System.out.println("Removing " + collection.get(id).getName() + " " + collection.get(id).getAge());
+        collection.remove(id);
+        
     }
     
     public static void searchPetName(){
@@ -91,6 +117,8 @@ public class Pet {
     public static void showMenu(){
         System.out.println("1) View All Pets");
         System.out.println("2) Add More Pets");
+        System.out.println("3) Update Existing Pets");
+        System.out.println("4) Remove Existing Pets");
         System.out.println("5) Search For Pets Using Name");
         System.out.println("6) Search For Pets Using Age");
         System.out.println("7) Exit");
