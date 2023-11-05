@@ -19,15 +19,17 @@ public class Pet {
         int user;
         while(true){
             showMenu();
+            System.out.print("Your Choice: ");
             user = menuScan.nextInt();
-            System.out.println("Your Choice: " + user);
+            
             if(user == 7){
                 break;
             }
             switch(user){
                 case 1 -> showPet();
                 case 2 -> addPet();
-                case 5 -> searchPet();
+                case 5 -> searchPetName();
+                case 6 -> searchPetAge();
                 default -> System.out.println("Not In Option");
             }
             
@@ -53,7 +55,7 @@ public class Pet {
         }
     }
     
-    public static void searchPet(){
+    public static void searchPetName(){
         Scanner input = new Scanner(System.in);
         System.out.print("Enter A Name To Search: ");
         String name = input.nextLine();
@@ -70,16 +72,33 @@ public class Pet {
         
     }
     
+    private static void searchPetAge() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter A Name To Search: ");
+        int age = input.nextInt();
+        
+        showBreaker();
+        System.out.printf("%s %2s %s %-10s %s %3s %s", "|","ID","|","Name","|","Age","|");
+        showBreaker();
+        for(int i =0; i < collection.size(); i++){
+            if(collection.get(i).getAge() == age){
+                System.out.printf("%s %2s %s %-10s %s %3s %s%n", "|",i,"|",collection.get(i).getName(),"|",collection.get(i).getAge(),"|");
+            }
+        }
+        showBreaker();
+    }
+    
     public static void showMenu(){
         System.out.println("1) View All Pets");
         System.out.println("2) Add More Pets");
-        System.out.println("5) Search For Pets");
+        System.out.println("5) Search For Pets Using Name");
+        System.out.println("6) Search For Pets Using Age");
         System.out.println("7) Exit");
     }    
     
     public static void showPet(){
         showBreaker();
-        System.out.printf("%s %2s %s %-10s %s %3s %s", "|","ID","|","Name","|","Age","|");
+        System.out.printf("%s %2s %s %-10s %s %3s %s%n", "|","ID","|","Name","|","Age","|");
         showBreaker();
         for(int i =0; i < collection.size(); i++){
             System.out.printf("%s %2s %s %-10s %s %3s %s%n", "|",i,"|",collection.get(i).getName(),"|",collection.get(i).getAge(),"|");
@@ -88,6 +107,8 @@ public class Pet {
     }
     
     public static void showBreaker(){
-        System.out.printf("%n%s%23s%s%n", "+","-----------------------","+");
+        System.out.printf("%s%23s%s%n", "+","-----------------------","+");
     }
+
+    
 }
