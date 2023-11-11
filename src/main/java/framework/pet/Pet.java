@@ -5,14 +5,8 @@
 
 package framework.pet;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,13 +14,9 @@ import java.util.logging.Logger;
  */
 public class Pet {
     private static ArrayList<petObj> collection = new ArrayList(); 
-    private static String fileName = "petfile"; //  .txt is added in code
-    
-    public static void main(String[] args) throws CustomError {
+    public static void main(String[] args) {
         Scanner menuScan = new Scanner(System.in);
         int user;
-        loadFile();
-        
         while(true){
             showMenu();
             System.out.print("Your Choice: ");
@@ -38,19 +28,18 @@ public class Pet {
             switch(user){
                 case 1 -> showPet();
                 case 2 -> addPet();
-                //case 3 -> updatePet();
+                case 3 -> updatePet();
                 case 4 -> removePet();
-                //case 5 -> searchPetName();
-                //case 6 -> searchPetAge();
-                default -> System.out.println("Not An Option");
+                case 5 -> searchPetName();
+                case 6 -> searchPetAge();
+                default -> System.out.println("Not In Option");
             }
             
             
         }   //  End of (Main)While loop
-        saveFile();
     }   //  End of Main class
     
-    public static void addPet() throws CustomError{
+    public static void addPet(){
         Scanner input = new Scanner(System.in);
         petObj pet;
         
@@ -58,89 +47,14 @@ public class Pet {
         while(true){
             
             System.out.print("(Name) (Age): ");
-            
-            //  Checks if there is enough space to add
-            try{
-                String petName = input.nextLine();
-                String[] nameAge = petName.split(" ");
-                if("done".equals(nameAge[0])){
-                    break;
-                }
-                CustomError.checkValue(nameAge);
-                CustomError.checkMax(collection);                               //  Checks for max size
-                CustomError.checkAge(Integer.parseInt(nameAge[1]));                               //  Checks for Min-Max age
-                
-                
-                //  Does the Process
-                pet = new petObj(nameAge[0], Integer.parseInt(nameAge[1]));
-                collection.add(pet);
-            }catch(CustomError e){
-                System.out.println(e);
-            }catch(ArrayIndexOutOfBoundsException e){
-                throw new CustomError("You need to Add a (age)\nExample: tom 2");
-            }catch(NumberFormatException e){
-                throw new CustomError(" Pet Needs An Age\nExample: tom 2");
+            String petName = input.nextLine();
+            String[] nameAge = petName.split(" ");
+            if("done".equals(nameAge[0])){
+                break;
             }
-            
+            pet = new petObj(nameAge[0], Integer.parseInt(nameAge[1]));
+            collection.add(pet);
         }
-    }
-    
-    public static void saveFile(){  //  THE FILE GETS REPLACED AND OVERWRITE SO ANY ONFO ON THE PREVS FILE WILL GET LOST
-        try{    
-            File file = new File(fileName+".txt");
-            if(file.exists()){
-                file.delete();
-            }
-            file.createNewFile();
-            PrintWriter write = new PrintWriter(fileName+".txt");
-            for(var i: collection){
-                write.print(i.getName() + " " + i.getAge()+"\n");
-            }
-            write.close();
-            
-        }catch(IOException e){
-            System.out.println("Saving To File");
-        }
-    }
-    
-    public static void loadFile() throws CustomError{
-        String[] nameAge;
-        try{
-            File file = new File(fileName + ".txt");
-            Scanner reader = new Scanner(file);
-            
-            int fileSize = 0;
-            
-            while(reader.hasNext()){
-                fileSize++;
-                System.out.println("loading to file");
-                nameAge = (reader.nextLine()).split(" ");
-                
-                CustomError.checkValue(nameAge);
-                CustomError.checkAge(Integer.parseInt(nameAge[1]));
-                
-                
-                petObj pet = new petObj(nameAge[0], Integer.parseInt(nameAge[1]));
-                collection.add(pet);
-                
-                //  This checks the size while writing to array, will stop at 5
-                if(fileSize >= 6){
-                    throw new CustomError("File Too Large, More then 5 pets Detected");
-                }
-            }
-            
-            reader.close();
-            
-        }catch(FileNotFoundException e){
-            System.out.println("File: " + fileName + ".txt is Not Found");
-        }catch(CustomError e){
-            System.out.println(e);
-        }catch(ArrayIndexOutOfBoundsException e){
-            throw new CustomError("You need to Add a (age)\nExample: tom 2");
-        }catch(NumberFormatException e){
-            throw new CustomError(" Pet Needs An Age\nExample: tom 2");
-        }
-        
     }
     
     public static void updatePet(){
@@ -162,16 +76,8 @@ public class Pet {
         showPet();
         System.out.print("Enter ID Of Pet To Remove: ");
         int id = input.nextInt();
-        
-        try{
-            CustomError.checkID(id, collection);
-            
-            System.out.println("Removing " + collection.get(id).getName() + " " + collection.get(id).getAge());
-            collection.remove(id);
-        }catch(CustomError e){
-            System.out.println(e);
-        }
-        
+        System.out.println("Removing " + collection.get(id).getName() + " " + collection.get(id).getAge());
+        collection.remove(id);
         
     }
     
@@ -211,10 +117,10 @@ public class Pet {
     public static void showMenu(){
         System.out.println("1) View All Pets");
         System.out.println("2) Add More Pets");
-        
+        System.out.println("3) Update Existing Pets");
         System.out.println("4) Remove Existing Pets");
-        
-        
+        System.out.println("5) Search For Pets Using Name");
+        System.out.println("6) Search For Pets Using Age");
         System.out.println("7) Exit");
     }    
     
